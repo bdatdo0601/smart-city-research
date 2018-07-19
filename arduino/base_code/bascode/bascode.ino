@@ -13,6 +13,7 @@
 #define LT_M !digitalRead(4)
 #define LT_L !digitalRead(2)
 
+
 enum CarState { HALT, FWD, RIGHT_T, LEFT_T, LINE_TRACKING, BWD };
 enum RoadState { CLEAR, LEFT_BLOCK, RIGHT_BLOCK, FULL_BLOCK };
 enum CarSpeedState { SLOW, AVERAGE, FAST };
@@ -296,7 +297,10 @@ void sendCarStatus() {
   Serial.println(csCmd);   
   Serial.println(cssCmd);
   Serial.println(rsCmd);   
-  Serial.println(iLTCmd); 
+  Serial.println(iLTCmd);
+  Serial.println(lltCmd);
+  Serial.println(rltCmd);
+  Serial.println(mltCmd);
   
 }
 /****************************
@@ -323,7 +327,6 @@ void setup() {
 }
 
 void loop() { 
-  sendCarStatus();
   getstr = Serial.read();
   if (isObjectDetectedInFront() && carState != HALT) {
     if (carState == FWD) {
@@ -333,7 +336,6 @@ void loop() {
   } else if (isLineTracking && (LT_M || LT_R || LT_L)) {
     lineTracker();
   }
-  Serial.println(getstr);
   switch(getstr){
     case 'w': changeSpeed(carSpeedState); forward();  break;
     case 's': changeSpeed(carSpeedState); backward();  break;
@@ -345,6 +347,7 @@ void loop() {
     case 'h': changeSpeed(FAST); break;
     case 'z': updateObstacleMeasurement(); break;
     case 'c': toggleLineTracking(); break;
+    case 'e': sendCarStatus(); break;
     default: break;
   }
 }

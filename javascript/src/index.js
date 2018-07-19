@@ -17,12 +17,8 @@ const uart = {
   rxUUID: "ffe1"
 };
 
-const interval = (data) => setInterval(() => {
-  console.log(String(data));
-}, 2000);
-
-const bleSerial = new BleUart("foo", uart);
-
+const bleSerial = new BleUart("TESTVEC", "foo", uart);
+const bleSerial2 = new BleUart("TESTVEC2", "foo", uart)
 const stringToHex = (char) => {
   if (char.length > 1) throw new Error("invalid char");
   return char.charCodeAt(0);
@@ -34,15 +30,66 @@ bleSerial.on("data", function(data) {
   //received data here, need to split
   // console.log(String(data));
   const printData = String(data);
-  if (!printData.match(/\w+ \d+/)) {
-    console.log(printData);
-  }
+  console.log(printData);
 });
 
-// thus function gets called if the radio successfully starts scanning:
-bleSerial.on("scanning", function(status) {
-  console.log("radio status: " + status);
-});
+bleSerial2.on("data", function(data) {
+  //received data here, need to split
+  // console.log(String(data));
+  const printData = String(data);
+  console.log(printData);
+})
+
+bleSerial2.on("connected", function(data) {
+  console.log("test");
+  // listen for the "keypress" event
+  process.stdin.on("keypress", function(ch, key) {
+    if (key && key.ctrl && key.name == "c") {
+      bleSerial.write("x");
+      process.stdin.pause();
+    }
+    if (key) {
+      switch (key.name) {
+        case "w":
+          bleSerial2.write("w");
+          break;
+        case "a":
+          bleSerial2.write("a");
+          break;
+        case "s":
+          bleSerial2.write("s");
+          break;
+        case "d":
+          bleSerial2.write("d");
+          break;
+        case "x":
+          bleSerial2.write("x");
+          break;
+        case "f":
+          bleSerial2.write("f");
+          break;
+        case "g":
+          bleSerial2.write("g");
+          break;
+        case "h":
+          bleSerial2.write("h");
+          break;
+        case "z":
+          bleSerial2.write("z");
+          break;
+        case "c":
+          bleSerial2.write("c");
+          break;
+        case "e":
+          bleSerial2.write("e");
+          break;
+      }
+    }
+  });
+
+
+  process.stdin.resume();
+})
 
 // this function gets called when the program
 // establishes a connection with the remote BLE radio:
@@ -85,6 +132,9 @@ bleSerial.on("connected", function(data) {
           break;
         case "c":
           bleSerial.write("c");
+          break;
+        case "e":
+          bleSerial2.write("e");
           break;
       }
     }

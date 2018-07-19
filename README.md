@@ -40,7 +40,7 @@ As the moment of execution, the script will find a specific BT device name (curr
     case 's': changeSpeed(carSpeedState); backward();  break; //Move Backward
     case 'a': changeSpeed(FAST); turnLeft();  break; // Turn left
     case 'd': changeSpeed(FAST); turnRight(); break; // Turn Right
-    case 'x': immediateStop();  break;
+    case 'x': immediateStop();  break; 
     case 'f': changeSpeed(SLOW); break; //change speed to slow (100)
     case 'g': changeSpeed(AVERAGE); break; //change speed to average (128)
     case 'h': changeSpeed(FAST); break; //change speed to fast (255)

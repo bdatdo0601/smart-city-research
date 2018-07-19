@@ -89,7 +89,7 @@ var checkService = function(name, uart) {
 };
 
 // constructor function, so you can call new BleUart():
-var BleUart = function(name, options) {
+var BleUart = function(deviceName, name, options) {
   // get known service or empty object
   var uart = knownUartServices[name] || {};
   // apply user over rides
@@ -119,7 +119,7 @@ var BleUart = function(name, options) {
 
   // the connect function:
   self.connect = function(peripheral) {
-    if (peripheral.advertisement.localName !== "HC-08") return;
+    if (peripheral.advertisement.localName !== deviceName) return;
     self.peripheral = peripheral;
     console.log(`connecting to ${JSON.stringify(peripheral.advertisement)}`);
     peripheral.connect();
