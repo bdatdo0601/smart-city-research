@@ -12,7 +12,7 @@ modified 1 Dec 2015
 by Don Coleman
 */
 
-var noble = require("noble"); //noble library
+var noble = require("noble-uwp"); //noble library
 var util = require("util"); // utilities library
 
 // make an instance of the eventEmitter library:
@@ -89,7 +89,7 @@ var checkService = function(name, uart) {
 };
 
 // constructor function, so you can call new BleUart():
-var BleUart = function(deviceName, name, options) {
+var BleUart = function(deviceName, macAddr, name, options) {
   // get known service or empty object
   var uart = knownUartServices[name] || {};
   // apply user over rides
@@ -119,7 +119,9 @@ var BleUart = function(deviceName, name, options) {
 
   // the connect function:
   self.connect = function(peripheral) {
-    if (peripheral.advertisement.localName !== deviceName) return;
+    console.log(peripheral.address);
+    if (peripheral.advertisement.localName !== deviceName && peripheral.address !== macAddr) return;
+    console.log(deviceName)
     self.peripheral = peripheral;
     console.log(`connecting to ${JSON.stringify(peripheral.advertisement)}`);
     peripheral.connect();

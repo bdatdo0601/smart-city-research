@@ -17,8 +17,8 @@ const uart = {
   rxUUID: "ffe1"
 };
 
-const bleSerial = new BleUart("TESTVEC", "foo", uart);
-const bleSerial2 = new BleUart("TESTVEC2", "foo", uart)
+const bleSerial = new BleUart("TESTVEC", "3c:a3:08:87:c7:11","foo", uart);
+const bleSerial2 = new BleUart("TESTVEC2", "94:e3:6d:68:41:9f","foo", uart)
 const stringToHex = (char) => {
   if (char.length > 1) throw new Error("invalid char");
   return char.charCodeAt(0);

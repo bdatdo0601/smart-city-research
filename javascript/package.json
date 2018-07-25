@@ -5,23 +5,26 @@
       "author": "Dat Do",
       "license": "MIT",
       "scripts": {
-            "clean": "rm -rf build && mkdir build",
+            "clean": "rimraf build && mkdir build",
             "build-server": "babel -d ./build ./src -s --copy-files",
             "init-db": "nodemon --exec babel-node -- src/dbinit.js",
-            "start": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node -- src/index.js",
+            "start": "rimraf ./node_modules/.cache/babel-loader && nodemon --exec babel-node -- src/index.js",
             "build": "yarn clean && yarn build-server",
             "start-production": "NODE_ENV=production node ./build/index.js",
             "test": "babel-node -- test/index.js"
       },
       "dependencies": {
             "bluetooth-serial-port": "^2.1.6",
+            "graphql": "^0.13.2",
             "johnny-five": "^0.15.0",
             "keyboardjs": "^2.4.1",
             "keypress": "^0.2.1",
             "lodash": "^4.17.10",
             "noble": "^1.9.1",
+            "noble-uwp": "^0.6.2",
             "node-bluetooth": "^1.2.2",
-            "xpc-connection": "^0.1.4"
+            "nodemon": "^1.18.3",
+            "rimraf": "^2.6.2"
       },
       "devDependencies": {
             "babel-cli": "^6.26.0",
