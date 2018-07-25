@@ -19,6 +19,7 @@
             "keypress": "^0.2.1",
             "lodash": "^4.17.10",
             "noble": "^1.9.1",
+            "noble-uwp": "^0.6.2",
             "node-bluetooth": "^1.2.2",
             "xpc-connection": "^0.1.4"
       },

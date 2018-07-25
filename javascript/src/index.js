@@ -1,8 +1,9 @@
 import { print } from "util";
+import keypress from "keypress";
+import _ from "lodash";
 
 import BleUart from "./lib/BleUart";
-import _ from "lodash";
-import keypress from "keypress";
+import DEVICES from "./data/devices";
 
 // make `process.stdin` begin emitting "keypress" events
 keypress(process.stdin);
@@ -17,7 +18,7 @@ const uart = {
     rxUUID: "ffe1",
 };
 
-const bleSerial = new BleUart("TESTVEC2", uart);
+const bleSerial = new BleUart(DEVICES.TESTVEC2, uart);
 
 // this function gets called when new data is received from
 // the Bluetooth LE serial service:

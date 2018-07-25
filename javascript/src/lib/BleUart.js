@@ -1,8 +1,12 @@
+import os from "os";
 import noble from "noble";
+import nobleUWP from "noble-uwp";
 import util from "util";
 import EventEmitter from "events";
 
 import { uuid, checkUartServiceFormat } from "./util";
+
+const bleModule = os.platform() === "win32" ? nobleUWP : noble;
 
 const BT_STATE = Object.freeze({
     POWERED_ON: "poweredOn",
@@ -23,7 +27,7 @@ const CHARACTERISTIC_STATE = Object.freeze({
 });
 
 class BleUart extends EventEmitter {
-    constructor(deviceName, options) {
+    constructor({ deviceName, macAddr }, options) {
         super();
         this.uart = { ...options };
         checkUartServiceFormat(null, this.uart);
@@ -37,13 +41,14 @@ class BleUart extends EventEmitter {
         this.connected = false;
         this.peripheral = null;
         this.deviceName = deviceName;
-        noble.on(BT_STATE.STATE_CHANGE, this.scan);
-        noble.on(BT_STATE.DISCOVER, this.connect);
+        this.macAddr = macAddr;
+        bleModule.on(BT_STATE.STATE_CHANGE, this.scan);
+        bleModule.on(BT_STATE.DISCOVER, this.connect);
     }
 
     scan = state => {
         if (state === BT_STATE.POWERED_ON) {
-            noble.startScanning([], false);
+            bleModule.startScanning([], false);
         }
         this.emit(BT_STATE.SCANNING, state);
     };
@@ -107,13 +112,13 @@ class BleUart extends EventEmitter {
 
     connect = peripheral => {
         const peripheralName = peripheral.advertisement.localName;
-        if (!peripheralName || peripheralName !== this.deviceName) return;
+        if (!peripheralName || (peripheralName !== this.deviceName && peripheral.address !== this.macAddr)) return;
         console.log(peripheral);
         this.peripheral = peripheral;
         console.log(`Connecting to ${peripheralName}`);
         peripheral.connect();
         peripheral.on(PERIPHERAL_STATE.CONNECT, () => {
-            noble.stopScanning();
+            bleModule.stopScanning();
             peripheral.discoverServices([this.serviceUUID], this.explore);
         });
         peripheral.on(PERIPHERAL_STATE.DISCONNECT, this.disconnect);
