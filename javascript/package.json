@@ -8,6 +8,7 @@
             "clean": "rm -rf build && mkdir build",
             "build-server": "babel -d ./build ./src -s --copy-files",
             "start": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node -- src/index.js",
+            "start-windows": "rimraf ./node_modules/.cache/babel-loader && nodemon --exec babel-node -- src/index.js",
             "build": "yarn clean && yarn build-server",
             "start-production": "NODE_ENV=production node ./build/index.js",
             "test": "babel-node -- test/index.js"
@@ -21,6 +22,10 @@
             "noble": "^1.9.1",
             "noble-uwp": "^0.6.2",
             "node-bluetooth": "^1.2.2",
+            "nodemon": "^1.18.3",
+            "rimraf": "^2.6.2"
+      },
+      "optionalDependencies": {
             "xpc-connection": "^0.1.4"
       },
       "devDependencies": {
