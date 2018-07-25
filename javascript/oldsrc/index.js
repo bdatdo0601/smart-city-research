@@ -1,6 +1,6 @@
 import { print } from "util";
 
-import BleUart from "./lib/BleUart";
+import BleUart from "./bleUtil";
 import _ from "lodash";
 import keypress from "keypress";
 
@@ -17,7 +17,8 @@ const uart = {
     rxUUID: "ffe1",
 };
 
-const bleSerial = new BleUart("TESTVEC2", uart);
+const bleSerial = new BleUart("TESTVEC", "foo", uart);
+const bleSerial2 = new BleUart("TESTVEC2", "foo", uart);
 
 // this function gets called when new data is received from
 // the Bluetooth LE serial service:
@@ -26,6 +27,63 @@ bleSerial.on("data", function(data) {
     // console.log(String(data));
     const printData = String(data);
     console.log(printData);
+});
+
+bleSerial2.on("data", function(data) {
+    //received data here, need to split
+    // console.log(String(data));
+    const printData = String(data);
+    console.log(printData);
+});
+
+bleSerial2.on("connected", function(data) {
+    console.log("test");
+    // listen for the "keypress" event
+    process.stdin.on("keypress", function(ch, key) {
+        if (key && key.ctrl && key.name == "c") {
+            bleSerial.write("x");
+            process.stdin.pause();
+        }
+        if (key) {
+            switch (key.name) {
+                case "w":
+                    bleSerial2.write("w");
+                    break;
+                case "a":
+                    bleSerial2.write("a");
+                    break;
+                case "s":
+                    bleSerial2.write("s");
+                    break;
+                case "d":
+                    bleSerial2.write("d");
+                    break;
+                case "x":
+                    bleSerial2.write("x");
+                    break;
+                case "f":
+                    bleSerial2.write("f");
+                    break;
+                case "g":
+                    bleSerial2.write("g");
+                    break;
+                case "h":
+                    bleSerial2.write("h");
+                    break;
+                case "z":
+                    bleSerial2.write("z");
+                    break;
+                case "c":
+                    bleSerial2.write("c");
+                    break;
+                case "e":
+                    bleSerial2.write("e");
+                    break;
+            }
+        }
+    });
+
+    process.stdin.resume();
 });
 
 // this function gets called when the program
@@ -71,7 +129,7 @@ bleSerial.on("connected", function(data) {
                     bleSerial.write("c");
                     break;
                 case "e":
-                    bleSerial.write("e");
+                    bleSerial2.write("e");
                     break;
             }
         }

@@ -118,6 +118,8 @@ void backward(){
 }
 
 void turnLeft(){
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, LOW);
@@ -127,6 +129,8 @@ void turnLeft(){
 }
 
 void turnRight(){
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -151,7 +155,7 @@ void slowDown(int initialSpeed, int finalSpeed) {
   }
 }
 
-void changeSpeed(CarSpeedState desiredSpeedState) {
+void changeSpeed(CarSpeedState desiredSpeedState, bool isNewSpeed) {
   int currentSpeed = getCarSpeedFromState(carSpeedState);
   int desiredSpeed = getCarSpeedFromState(desiredSpeedState);
   if (currentSpeed > desiredSpeed) {
@@ -159,7 +163,8 @@ void changeSpeed(CarSpeedState desiredSpeedState) {
   } else {
     slowDown(currentSpeed, desiredSpeed);
   }
-  carSpeedState = desiredSpeedState;
+  Serial.println("Speed Change");
+  if (isNewSpeed) carSpeedState = desiredSpeedState;
 }
 
 void immediateStop(){
@@ -241,19 +246,19 @@ void toggleLineTracking(){
 
 void lineTracker() {
   if(LT_M){
-    changeSpeed(carSpeedState);
+    changeSpeed(carSpeedState, true);
     forward();
   }
   else if(LT_R) { 
     while (LT_R) {
-      changeSpeed(FAST);
+      changeSpeed(FAST, false);
       turnRight();
       if (LT_L) break;
     }
   }   
   else if(LT_L) {
     while (LT_L) {
-      changeSpeed(FAST);
+      changeSpeed(FAST, false);
       turnLeft();
       if (LT_R) break;
     }
@@ -337,14 +342,14 @@ void loop() {
     lineTracker();
   }
   switch(getstr){
-    case 'w': changeSpeed(carSpeedState); forward();  break;
-    case 's': changeSpeed(carSpeedState); backward();  break;
-    case 'a': changeSpeed(FAST); turnLeft();  break;
-    case 'd': changeSpeed(FAST); turnRight(); break;
+    case 'w': changeSpeed(carSpeedState, true); forward();  break;
+    case 's': changeSpeed(carSpeedState, true); backward();  break;
+    case 'a': turnLeft();  break;
+    case 'd': turnRight(); break;
     case 'x': immediateStop();  break;
-    case 'f': changeSpeed(SLOW); break;
-    case 'g': changeSpeed(AVERAGE); break;
-    case 'h': changeSpeed(FAST); break;
+    case 'f': changeSpeed(SLOW, true); break;
+    case 'g': changeSpeed(AVERAGE, true); break;
+    case 'h': changeSpeed(FAST, true); break;
     case 'z': updateObstacleMeasurement(); break;
     case 'c': toggleLineTracking(); break;
     case 'e': sendCarStatus(); break;

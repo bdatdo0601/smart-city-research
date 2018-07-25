@@ -7,7 +7,6 @@
       "scripts": {
             "clean": "rm -rf build && mkdir build",
             "build-server": "babel -d ./build ./src -s --copy-files",
-            "init-db": "nodemon --exec babel-node -- src/dbinit.js",
             "start": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node -- src/index.js",
             "build": "yarn clean && yarn build-server",
             "start-production": "NODE_ENV=production node ./build/index.js",
@@ -29,6 +28,7 @@
             "babel-eslint": "^8.2.3",
             "babel-plugin-import-graphql": "^2.5.2",
             "babel-plugin-inline-import": "^3.0.0",
+            "babel-plugin-transform-class-properties": "^6.24.1",
             "babel-plugin-transform-object-rest-spread": "^6.26.0",
             "babel-polyfill": "^6.0.16",
             "babel-preset-env": "^1.6.1",
