@@ -5,6 +5,6 @@ export default Object.freeze({
     },
     TESTVEC2: {
         deviceName: "TESTVEC2",
-        macAddr: "94:3e:6d:67:41:9f",
+        macAddr: "94:e3:6d:68:41:9f",
     },
 });
